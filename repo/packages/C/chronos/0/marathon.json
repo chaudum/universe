@@ -1,4 +1,147 @@
 {
-  "id": "chronos"
-}
+  "id": "{{chronos/id}}",
+  "cpus": {{chronos/cpus}},
+  "mem": {{chronos/mem}},
+  "instances": {{chronos/instances}},
+  "constraints": [["hostname", "UNIQUE"]],
+  "ports": [
+    {{chronos/http-port}}
 
+    {{#chronos/https-port}}
+    , {{chronos/https-port}}
+    {{/chronos/https-port}}
+  ],
+  "env": {
+    {{#chronos/libprocess-ip}}
+    "LIBPROCESS_IP": "{{chronos/libprocess-ip}}"
+    {{/chronos/libprocess-ip}}
+  },
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "mesosphere/chronos:v0.8.1",
+      "network": "HOST"
+    }
+  },
+  "args": [
+
+    "--master"
+    , "{{mesos/master}}"
+
+    {{#chronos/artifact-store}}
+    , "--artifact_store"
+    , "{{chronos/artifact-store}}"
+    {{/chronos/artifact-store}}
+
+    {{#chronos/checkpoint}}
+    , "--checkpoint"
+    {{/chronos/checkpoint}}
+
+    {{#chronos/executor}}
+    , "--executor"
+    , "{{chronos/executor}}"
+    {{/chronos/executor}}
+
+    {{#chronos/failover-timeout}}
+    , "--failover_timeout"
+    , "{{chronos/failover-timeout}}"
+    {{/chronos/failover-timeout}}
+
+    {{#chronos/framework-name}}
+    , "--framework_name"
+    , "{{chronos/framework-name}}"
+    {{/chronos/framework-name}}
+
+    {{#chronos/ha}}
+    , "--ha"
+    {{/chronos/ha}}
+
+    {{#chronos/local-port-max}}
+    , "--local_port_max"
+    , "{{chronos/local-port-max}}"
+    {{/chronos/local-port-max}}
+
+    {{#chronos/local-port-min}}
+    , "--local_port_min"
+    , "{{chronos/local-port-min}}"
+    {{/chronos/local-port-min}}
+
+    {{#chronos/mesos-role}}
+    , "--mesos_role"
+    , "{{chronos/mesos-role}}"
+    {{/chronos/mesos-role}}
+
+    {{#chronos/reconciliation-initial-delay}}
+    , "--reconciliation_initial_delay"
+    , "{{chronos/reconciliation-initial-delay}}"
+    {{/chronos/reconciliation-initial-delay}}
+
+    {{#chronos/reconciliation-interval}}
+    , "--reconciliation_interval"
+    , "{{chronos/reconciliation-interval}}"
+    {{/chronos/reconciliation-interval}}
+
+    {{#chronos/event-subscriber}}
+    , "--event_subscriber"
+    , "{{chronos/event-subscriber}}"
+    {{/chronos/event-subscriber}}
+
+    {{#chronos/http-endpoints}}
+    , "--http_endpoints"
+    , "{{chronos/http-endpoints}}"
+    {{/chronos/http-endpoints}}
+
+    , "--zk"
+    , "{{chronos/zk}}"
+
+    {{#chronos/zk-max-versions}}
+    , "--zk_max_versions"
+    , "{{chronos/zk-max-versions}}"
+    {{/chronos/zk-max-versions}}
+
+    {{#chronos/zk-timeout}}
+    , "--zk_timeout"
+    , "{{chronos/zk-timeout}}"
+    {{/chronos/zk-timeout}}
+
+    {{#chronos/mesos-authentication-principal}}
+    , "--mesos_authentication_principal"
+    , "{{chronos/mesos-authentication-principal}}"
+    {{/chronos/mesos-authentication-principal}}
+
+    {{#chronos/mesos-authentication-secret-file}}
+    , "--mesos_authentication_secret_file"
+    , "{{chronos/mesos-authentication-secret-file}}"
+    {{/chronos/mesos-authentication-secret-file}}
+
+    {{#chronos/chronos-store-timeout}}
+    , "--chronos_store_timeout"
+    , "{{chronos/chronos-store-timeout}}"
+    {{/chronos/chronos-store-timeout}}
+
+    {{#chronos/http-credentials}}
+    , "--http_credentials"
+    , "{{chronos/http-credentials}}"
+    {{/chronos/http-credentials}}
+
+    {{#chronos/http-port}}
+    , "--http_port"
+    , "{{chronos/http-port}}"
+    {{/chronos/http-port}}
+
+    {{#chronos/https-port}}
+    , "--https_port"
+    , "{{chronos/https-port}}"
+    {{/chronos/https-port}}
+
+    {{#chronos/ssl-keystore-password}}
+    , "--ssl_keystore_password"
+    , "{{chronos/ssl-keystore-password}}"
+    {{/chronos/ssl-keystore-password}}
+
+    {{#chronos/ssl-keystore-path}}
+    , "--ssl_keystore_path"
+    , "{{chronos/ssl-keystore-path}}"
+    {{/chronos/ssl-keystore-path}}
+  ]
+}
