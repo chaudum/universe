@@ -73,33 +73,18 @@
       "description": "The advertised hostname stored in ZooKeeper so another standby host can redirect to this elected leader (default = localhost)",
       "type": "string"
     },
-    "http_address": {
-      "description": "The address to listen on for HTTP requests",
-      "type": "string"
-    },
     "http_credentials": {
       "description": "Credentials for accessing the http service. If empty, anyone can access the HTTP endpoint. A username:password pair is expected where the username must not contain ':'. ",
       "type": "string"
-    },
-    "http_port": {
-      "description": "The port to listen on for HTTP requests",
-      "type": "integer",
-      "minimum": 0,
-      "default": 8080
     },
     "http_realm": {
       "description": "The security realm (aka 'area') associated with the credentials (default = Mesosphere)",
       "type": "string"
     },
-    "https_port": {
-      "description": "The port to listen on for HTTPS requests",
-      "type": "integer",
-      "minimum": 0,
-      "default": 8443
-    },
     "id": {
       "description": "Unique identifier for the app consisting of a series of names separated by slashes.",
-      "type": "string"
+      "type": "string",
+      "default": "/chronos"
     },
     "leader_max_idle_time": {
       "integer": "The look-ahead time for scheduling tasks in milliseconds (default = 5000)",
@@ -125,15 +110,15 @@
       "description": "Mail user (for auth)",
       "type": "string"
     },
-    "mesos/master": {
-      "description": "The URL of the Mesos master. The format is a comma-delimited list of hosts like zk://host1:port,host2:port/mesos. If using ZooKeeper, pay particular attention to the leading zk:// and trailing /mesos! If not using ZooKeeper, standard URLs like http://localhost:5050 are also acceptable.",
-      "type": "string"
-    },
     "mem": {
       "description": "Memory (MB) to allocate to each Chronos instance.",
       "type": "number",
-      "minimum": 0.0,
-      "default": 512.0
+      "minimum": 512.0,
+      "default": 700.0
+    },
+    "mesos/master": {
+      "description": "The URL of the Mesos master. The format is a comma-delimited list of hosts like zk://host1:port,host2:port/mesos. If using ZooKeeper, pay particular attention to the leading zk:// and trailing /mesos! If not using ZooKeeper, standard URLs like http://localhost:5050 are also acceptable.",
+      "type": "string"
     },
     "mesos_checkpoint": {
       "description": "Enable checkpointing in Mesos",
@@ -183,14 +168,6 @@
       "description": "Webhook URL for posting to Slack",
       "type": "string"
     },
-    "ssl_keystore_password": {
-      "description": "Password for the keystore supplied with the `ssl_keystore_path` option. Required if `ssl_keystore_path` is supplied.",
-      "type": "string"
-    },
-    "ssl_keystore_path": {
-      "description": "Path to the SSL keystore. HTTPS (SSL) will be enabled if this option is supplied. Requires `--ssl_keystore_password`. ",
-      "type": "string"
-    },
     "task_epsilon": {
       "description": "The default epsilon value for tasks, in seconds (default = 60)",
       "type": "string"
@@ -217,7 +194,6 @@
     }
   },
   "required": [
-    "id",
     "mesos/master",
     "zk_hosts"
   ]

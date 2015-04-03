@@ -1,12 +1,9 @@
 {
   "id": "{{id}}",
+  "instances": {{instances}},
   "cpus": {{cpus}},
   "mem": {{mem}},
-  "instances": {{instances}},
-  "ports": [
-    {{http_port}},
-    {{https_port}}
-  ],
+  "disk": 0.0,
   "env": {
     "NO_OP": ""
 
@@ -14,25 +11,22 @@
     , "MESOSPHERE_HTTP_CREDENTIALS": "{{http_credentials}}"
     {{/http_credentials}}
 
-    {{#ssl_keystore_password}}
-    , "MESOSPHERE_KEYSTORE_PASS": "{{ssl_keystore_password}}"
-    {{/ssl_keystore_password}}
-
-    {{#ssl_keystore_path}}
-    , "MESOSPHERE_KEYSTORE_PATH": "{{ssl_keystore_path}}"
-    {{/ssl_keystore_path}}
   },
   "container": {
     "type": "DOCKER",
     "docker": {
-      "image": "mesosphere/chronos",
-      "network": "HOST"
+      "image": "mesosphere/chronos:chronos-2.3.2-0.1.20150207000917.ubuntu1404-mesos-0.22.0-1.0.ubuntu1404",
+      "network": "BRIDGE",
+      "portMappings": [
+        { "containerPort": 4400, "hostPort": 0, "servicePort": 4400, "protocol": "tcp" }
+      ]
     }
   },
   "args": [
-    "/usr/local/bin/chronos",
+    "chronos", "run_jar",
     "--master", "{{mesos/master}}",
-    "--zk_hosts", "{{zk_hosts}}"
+    "--zk_hosts", "{{zk_hosts}}",
+    "--http_port", "4400"
 
 
     {{#assets_path}},                 "--assets_path", "{{assets_path}}"                                {{/assets_path}}
@@ -50,11 +44,8 @@
     {{#graphite_host_port}},          "--graphite_host_port", "{{graphite_host_port}}"                  {{/graphite_host_port}}
     {{#graphite_reporting_interval}}, "--graphite_reporting_interval", "{{graphite_reporting_interval}}"{{/graphite_reporting_interval}}
     {{#hostname}},                    "--hostname", "{{hostname}}"                                      {{/hostname}}
-    {{#http_address}},                "--http_address", "{{http_address}}"                              {{/http_address}}
     {{#http_credentials}},            "--http_credentials", "{{http_credentials}}"                      {{/http_credentials}}
-    {{#http_port}},                   "--http_port", "{{http_port}}"                                    {{/http_port}}
     {{#http_realm}},                  "--http_realm", "{{http_realm}}"                                  {{/http_realm}}
-    {{#https_port}},                  "--https_port", "{{https_port}}"                                  {{/https_port}}
     {{#leader_max_idle_time}},        "--leader_max_idle_time", "{{leader_max_idle_time}}"              {{/leader_max_idle_time}}
     {{#mail_from}},                   "--mail_from", "{{mail_from}}"                                    {{/mail_from}}
     {{#mail_password}},               "--mail_password", "{{mail_password}}"                            {{/mail_password}}
@@ -73,15 +64,20 @@
     {{#slack_channel}},               "--slack_channel", "{{slack_channel}}"                            {{/slack_channel}}
     {{#slack_token}},                 "--slack_token", "{{slack_token}}"                                {{/slack_token}}
     {{#slack_url}},                   "--slack_url", "{{slack_url}}"                                    {{/slack_url}}
-    {{#ssl_keystore_password}},       "--ssl_keystore_password", "{{ssl_keystore_password}}"            {{/ssl_keystore_password}}
-    {{#ssl_keystore_path}},           "--ssl_keystore_path", "{{ssl_keystore_path}}"                    {{/ssl_keystore_path}}
     {{#task_epsilon}},                "--task_epsilon", "{{task_epsilon}}"                              {{/task_epsilon}}
     {{#user}},                        "--user", "{{user}}"                                              {{/user}}
     {{#webui_url}},                   "--webui_url", "{{webui_url}}"                                    {{/webui_url}}
-    {{#zk_hosts}},                    "--zk_hosts", "{{zk_hosts}}"                                      {{/zk_hosts}}
     {{#zk_path}},                     "--zk_path", "{{zk_path}}"                                        {{/zk_path}}
     {{#zk_timeout}},                  "--zk_timeout", "{{zk_timeout}}"                                  {{/zk_timeout}}
-
-
+  ],
+  "healthChecks": [
+    {
+      "intervalSeconds": 60,
+      "maxConsecutiveFailures": 2,
+      "path": "/",
+      "portIndex": 0,
+      "protocol": "HTTP"
+    }
   ]
+
 }
